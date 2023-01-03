@@ -1,51 +1,51 @@
 import tkinter as tk
-from tkinter.filedialog import askopenfilename, asksaveasfilename
+import os
 
-def open_file():
+from tkinter import ttk
+from tkinter.filedialog import askopenfilename, askdirectory
+
+
+def open_pdf():
     # Open a file for editing
-    filepath = askopenfilename(
-        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+    filePath = askopenfilename(
+        filetypes=[("PDF Files", "*.pdf"), ("All Files", "*.*")]
     )
-    if not filepath:
+    if not filePath:
         return
-    txt_edit.delete("1.0", tk.END)
-    with open(filepath, mode="r", encoding="utf-8") as input_file:
-        text = input_file.read()
-        txt_edit.insert(tk.END, text)
-    window.title(f"Simple Text Editor - {filepath}")
+    os.mkdir(filePath + "")
+    window.title(f"PDF Bill to Excel - {filePath}")
 
-def save_file():
-    #Save the current file as a new file
-    filepath = asksaveasfilename(
-        defaultextension=".txt",
-        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
+
+def open_folder():
+    # Open a folder for editing
+    folderPath = askdirectory(
+        initialfile=None
     )
-    if not filepath:
+    if not folderPath:
         return
-    with open(filepath, mode="w", encoding="utf-8") as output_file:
-        text = txt_edit.get("1.0", tk.END)
-        output_file.write(text)
-    window.title(f"Simple Text Editor - {filepath}")
+    window.title(f"PDF Bill to Excel - {folderPath}")
+
 
 window = tk.Tk()
-window.title("To Do List")
+window.title("PDF Bill to Excel")
 
 window.rowconfigure(0, minsize=400)
 window.columnconfigure(1, minsize=400)
 
-txt_edit = tk.Text(window)
+treeview = ttk.Treeview()
 frm_buttons = tk.Frame(window, relief=tk.RAISED, bd=2)
 
-btn_open = tk.Button(frm_buttons, text="Open", command=open_file)
-btn_save = tk.Button(frm_buttons, text="Save As...", command=save_file)
+btn_open_folder = tk.Button(
+    frm_buttons, text="Open Folder", command=open_folder)
+btn_open = tk.Button(frm_buttons, text="Open Folder", command=open_folder)
 btn_close = tk.Button(frm_buttons, text="Exit", command=window.destroy)
 
-btn_open.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
-btn_save.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
+btn_open_folder.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
 btn_close.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
 
 frm_buttons.grid(row=0, column=0, sticky="ns")
-txt_edit.grid(row=0, column=1, sticky="nsew")
+treeview.grid(row=0, column=1, sticky="nsew")
 
 window.minsize(width=400, height=400)
+treeview.pack()
 window.mainloop()
