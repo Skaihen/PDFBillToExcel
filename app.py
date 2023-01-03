@@ -1,5 +1,5 @@
 import tkinter as tk
-import os
+
 
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, askdirectory
@@ -12,7 +12,7 @@ def open_pdf():
     )
     if not filePath:
         return
-    os.mkdir(filePath + "")
+    
     window.title(f"PDF Bill to Excel - {filePath}")
 
 
